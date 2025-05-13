@@ -70,11 +70,12 @@ SELECT DISTINCT r.facility_id
 FROM Response_Log r
 JOIN Incident i ON r.incident_id = i.incident_id
 WHERE i.type = 'earthquake'
-INTERSECT
-SELECT DISTINCT r.facility_id
-FROM Response_Log r
-JOIN Incident i ON r.incident_id = i.incident_id
-WHERE i.type = 'fire';
+  AND r.facility_id IN (
+    SELECT r2.facility_id
+    FROM Response_Log r2
+    JOIN Incident i2 ON r2.incident_id = i2.incident_id
+    WHERE i2.type = 'fire'
+  );
 
 
 -- 9. Average severity of incidents handled by each facility
